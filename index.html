@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Centro Médico VS</title>
+<meta name="description" content="Dermatología, medicina estética y bienestar integral — Dra. Valeria Sturgeon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&family=Beau+Rivage&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FEFEFE;
+    --paper-deep:#F2E9DE;
+    --ink:#634A35;
+    --ink-soft:#93826E;
+    --wine:#634A35;
+    --wine-deep:#4A3626;
+    --wine-soft:#E8DBCB;
+    --sage:#93826E;
+    --sand:#B8A99A;
+    --line: rgba(99,74,53,.18);
+    --card-bg: #FFFFFF;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#1B140F;
+      --paper-deep:#261C15;
+      --ink:#F2E6D8;
+      --ink-soft:#C9B7A5;
+      --wine:#D9BE9E;
+      --wine-deep:#E9D3B4;
+      --wine-soft:#3A2C21;
+      --sage:#B8A99A;
+      --sand:#93826E;
+      --line: rgba(242,230,216,.18);
+      --card-bg: #241A13;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#1B140F;
+    --paper-deep:#261C15;
+    --ink:#F2E6D8;
+    --ink-soft:#C9B7A5;
+    --wine:#D9BE9E;
+    --wine-deep:#E9D3B4;
+    --wine-soft:#3A2C21;
+    --sage:#B8A99A;
+    --sand:#93826E;
+    --line: rgba(242,230,216,.18);
+    --card-bg: #241A13;
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body.has-cursor, body.has-cursor a, body.has-cursor button{cursor:none;}
+
+  /* ---------- CUSTOM CURSOR ---------- */
+  .cursor-dot,.cursor-ring{
+    position:fixed;top:0;left:0;z-index:200;
+    border-radius:50%;pointer-events:none;
+    transform:translate(-50%,-50%);
+    will-change:transform;
+  }
+  .cursor-dot{width:6px;height:6px;background:var(--wine);opacity:0;transition:opacity .3s ease;}
+  .cursor-ring{
+    width:38px;height:38px;border:1px solid var(--ink);opacity:0;
+    transition:opacity .3s ease, width .3s cubic-bezier(.16,1,.3,1), height .3s cubic-bezier(.16,1,.3,1), border-color .3s ease, background .3s ease;
+  }
+  body.has-cursor .cursor-dot, body.has-cursor .cursor-ring{opacity:1;}
+  .cursor-ring.hovering{width:64px;height:64px;background:var(--wine);border-color:var(--wine);opacity:.14;}
+  .cursor-ring.hovering::after{content:"";}
+  h1,h2,h3,.serif{
+    font-family:'Baskervville','Iowan Old Style',Georgia,serif;
+    font-weight:400;
+    letter-spacing:-0.01em;
+    text-wrap:balance;
+    margin:0;
+  }
+  em{
+    font-family:'Beau Rivage',cursive;
+    font-style:normal;
+    font-weight:400;
+    font-size:1.22em;
+    color:var(--wine);
+  }
+  p{margin:0;line-height:1.6;color:var(--ink-soft);}
+  a{color:inherit;text-decoration:none;}
+  img,svg{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin-inline:auto;padding-inline:24px;}
+  .eyebrow{
+    font-size:.72rem;
+    font-weight:700;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--wine);
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--wine);display:inline-block;}
+  section{position:relative;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:14px 26px;
+    border-radius:999px;
+    font-weight:700;font-size:.85rem;letter-spacing:.02em;
+    border:1px solid var(--ink);
+    transition:transform .35s cubic-bezier(.16,1,.3,1), background .3s ease, color .3s ease;
+  }
+  .btn-solid{background:var(--ink);color:var(--paper);}
+  .btn-solid:hover{transform:translateY(-2px);}
+  .btn-line{border-color:var(--line);color:var(--ink);}
+  .btn-line:hover{border-color:var(--ink);transform:translateY(-2px);}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    padding:20px 0;
+    transition:background .4s ease, border-color .4s ease, padding .4s ease;
+    border-bottom:1px solid transparent;
+  }
+  header.scrolled{
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter:blur(14px);
+    border-color:var(--line);
+    padding:12px 0;
+  }
+  header.scrolled .logo-mark-img{height:104px;}
+  nav.wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;}
+  .logo{display:inline-flex;align-items:center;}
+  .logo-mark-img{height:192px;width:auto;display:block;transition:height .4s ease;}
+  @media (max-width:640px){.logo-mark-img{height:136px;}}
+  .navlinks{display:flex;align-items:center;gap:36px;}
+  .navlinks a{font-size:.82rem;font-weight:600;color:var(--ink-soft);transition:color .25s ease;}
+  .navlinks a:hover{color:var(--wine);}
+  .navcta{display:flex;align-items:center;gap:16px;}
+  .icon-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;transition:border-color .25s ease, transform .25s ease;}
+  .icon-btn:hover{border-color:var(--wine);transform:translateY(-2px);}
+  .menu-toggle{display:none;background:none;border:none;color:var(--ink);cursor:pointer;padding:6px;}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:260px 0 70px;perspective:1400px;}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:end;}
+  .hero h1{font-size:clamp(2.6rem, 5.4vw, 4.6rem);line-height:1.18;}
+  .hero h1 .mask{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em;}
+  .hero h1 .word{
+    display:inline-block;transform:translateY(112%);transition:transform .9s cubic-bezier(.16,1,.3,1);
+  }
+  .hero h1.ready .word{transform:translateY(0);}
+  .hero-copy{max-width:460px;margin-top:26px;}
+  .hero-actions{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap;}
+  .hero-visual{
+    position:relative;aspect-ratio:4/5;border-radius:26px;overflow:hidden;
+    background:
+      radial-gradient(120% 90% at 20% 10%, color-mix(in srgb, var(--wine) 55%, transparent), transparent 60%),
+      radial-gradient(100% 80% at 85% 95%, color-mix(in srgb, var(--sage) 45%, transparent), transparent 55%),
+      linear-gradient(160deg, var(--paper-deep), var(--paper));
+    box-shadow: 0 30px 70px -30px rgba(34,20,16,.35);
+    transform-style:preserve-3d;
+    transition:transform .5s cubic-bezier(.16,1,.3,1);
+    will-change:transform;
+  }
+  .hero-visual::after{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.5) .6px, transparent .6px);
+    background-size:3px 3px;
+    mix-blend-mode:overlay;opacity:.5;
+  }
+  .photo-cover{width:100%;height:100%;object-fit:cover;display:block;}
+  .hero-chip{
+    position:absolute;left:20px;bottom:20px;
+    background:color-mix(in srgb, var(--paper) 85%, transparent);
+    backdrop-filter:blur(10px);
+    border:1px solid var(--line);
+    padding:12px 16px;border-radius:14px;
+    display:flex;flex-direction:column;gap:2px;
+  }
+  .hero-chip .name{font-family:'Baskervville',serif;font-weight:400;font-size:1.05rem;}
+  .hero-chip .role{font-size:.68rem;color:var(--ink-soft);letter-spacing:.04em;}
+  .hero-chip .role.pending{font-style:italic;opacity:.75;}
+
+  /* ---------- MARQUEE ---------- */
+  .marquee-band{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 0;margin-top:60px;overflow:hidden;white-space:nowrap;}
+  .marquee-track{display:inline-flex;animation:scroll 32s linear infinite;}
+  .marquee-track span{
+    font-family:'Baskervville',serif;font-style:italic;font-weight:400;
+    font-size:1.15rem;color:var(--ink-soft);padding:0 28px;
+    display:inline-flex;align-items:center;gap:28px;
+  }
+  .marquee-track span::after{content:"◈";font-style:normal;color:var(--wine);font-size:.7rem;}
+  @keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  @media (prefers-reduced-motion: reduce){.marquee-track{animation:none;}}
+
+  /* ---------- STATS ---------- */
+  .stats{padding:64px 0;}
+  .stats .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;}
+  .stat{border-left:1px solid var(--line);padding-left:20px;}
+  .stat-num{font-family:'Baskervville',serif;font-weight:400;font-size:clamp(2.4rem,4.4vw,3.4rem);line-height:1;color:var(--wine);font-variant-numeric:tabular-nums;}
+  .stat-label{margin-top:8px;font-size:.82rem;color:var(--ink-soft);max-width:220px;}
+
+  /* ---------- CURSOR-FOLLOW CHIP ---------- */
+  .follow-chip{
+    position:fixed;top:0;left:0;z-index:150;pointer-events:none;
+    transform:translate(-50%,-50%) scale(.6);
+    background:var(--ink);color:var(--paper);
+    font-size:.72rem;font-weight:700;letter-spacing:.04em;
+    padding:9px 16px;border-radius:999px;
+    opacity:0;transition:opacity .25s ease, transform .25s cubic-bezier(.16,1,.3,1);
+    white-space:nowrap;
+  }
+  .follow-chip.show{opacity:1;}
+  @media (prefers-reduced-motion: reduce){
+    .hero h1 .word{transition:none;transform:none;}
+    .reveal{transition:none;opacity:1;transform:none;}
+    .hero-visual,.f-card{transition:none;}
+  }
+  @media (hover:none){
+    .cursor-dot,.cursor-ring,.follow-chip{display:none;}
+  }
+
+  /* ---------- FLOATING ACTIONS ---------- */
+  .floating-actions{
+    position:fixed;right:22px;bottom:22px;z-index:120;
+    display:flex;flex-direction:column;gap:12px;
+  }
+  .fab{
+    width:54px;height:54px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;box-shadow:0 16px 32px -14px rgba(20,14,10,.5);
+    transition:transform .3s cubic-bezier(.16,1,.3,1);
+  }
+  .fab:hover{transform:translateY(-3px) scale(1.06);}
+  .fab-whatsapp,.fab-instagram{background:var(--ink);}
+  @media (max-width:480px){
+    .floating-actions{right:14px;bottom:14px;gap:10px;}
+    .fab{width:46px;height:46px;}
+  }
+
+  /* ---------- REVEAL ---------- */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ---------- ABOUT ---------- */
+  .about{padding:120px 0;}
+  .about-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:center;}
+  .about-visual{aspect-ratio:3/4;border-radius:22px;background:linear-gradient(150deg,var(--wine-soft),var(--paper-deep) 70%);position:relative;overflow:hidden;}
+  .about-visual::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(60% 50% at 30% 20%, color-mix(in srgb, var(--wine) 30%, transparent), transparent 70%);
+  }
+  .about-quote{font-size:clamp(1.5rem,2.6vw,2.15rem);line-height:1.28;margin-top:20px;}
+  .credentials{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px;}
+  .credentials span{
+    font-size:.74rem;font-weight:700;letter-spacing:.03em;
+    padding:9px 16px;border-radius:999px;border:1px solid var(--line);color:var(--ink-soft);
+  }
+
+  /* ---------- TEAM ---------- */
+  .team{padding:120px 0;background:var(--paper-deep);}
+  .team-banner{position:relative;border-radius:24px;overflow:hidden;aspect-ratio:16/10;margin-bottom:60px;box-shadow:0 30px 70px -35px rgba(34,20,16,.3);}
+  .team-banner img{object-position:center 12%;}
+  .team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;perspective:1200px;}
+  .team-card{display:flex;flex-direction:column;gap:16px;transition:opacity .4s ease;}
+  .team-grid:hover .team-card{opacity:.55;}
+  .team-grid .team-card:hover{opacity:1;}
+  .team-photo{aspect-ratio:4/5;border-radius:18px;overflow:hidden;}
+  .team-card h3{font-size:1.2rem;}
+  .team-role{font-size:.8rem;color:var(--ink-soft);margin-top:3px;letter-spacing:.02em;}
+  .team-role.pending{font-style:italic;opacity:.75;}
+
+  /* ---------- TREATMENTS (accordion) ---------- */
+  .treatments{padding:120px 0;background:var(--paper-deep);}
+  .t-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:44px;}
+  .t-head h2{font-size:clamp(2rem,3.6vw,3.1rem);max-width:640px;}
+  .t-toggle-all{
+    background:none;border:1px solid var(--line);color:var(--ink);
+    padding:11px 20px;border-radius:999px;font-size:.78rem;font-weight:700;
+    cursor:pointer;white-space:nowrap;transition:border-color .25s ease;
+  }
+  .t-toggle-all:hover{border-color:var(--ink);}
+  .t-accordion{border-top:1px solid var(--line);}
+  .t-group{border-bottom:1px solid var(--line);}
+  .t-group > summary{
+    display:flex;align-items:center;gap:18px;
+    padding:26px 4px;cursor:pointer;list-style:none;
+  }
+  .t-group > summary::-webkit-details-marker{display:none;}
+  .t-group-label{
+    font-family:'Baskervville',serif;font-size:clamp(1.15rem,2vw,1.5rem);font-weight:400;
+    flex:1;
+  }
+  .t-group-label .idx{font-size:.68rem;font-weight:800;letter-spacing:.12em;color:var(--sage);vertical-align:middle;margin-right:14px;font-family:'Jost',sans-serif;}
+  .t-group-count{font-size:.75rem;color:var(--ink-soft);font-variant-numeric:tabular-nums;}
+  .t-chevron{
+    width:30px;height:30px;border-radius:50%;border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    transition:transform .35s cubic-bezier(.16,1,.3,1), border-color .25s ease;
+    color:var(--wine);
+  }
+  .t-group[open] .t-chevron{transform:rotate(45deg);border-color:var(--wine);}
+  .t-group-body{padding:0 4px 26px;}
+  .t-row{
+    display:flex;align-items:center;gap:18px;
+    padding:14px 10px;border-radius:12px;
+    position:relative;cursor:default;
+    transition:background .3s ease, padding-left .3s ease, opacity .35s ease;
+  }
+  .t-row:hover{background:var(--card-bg);padding-left:18px;}
+  .t-group-body:hover .t-row{opacity:.5;}
+  .t-group-body:hover .t-row:hover{opacity:1;}
+  .t-num{font-size:.75rem;color:var(--ink-soft);font-variant-numeric:tabular-nums;width:22px;flex-shrink:0;}
+  .t-name{font-family:'Baskervville',serif;font-weight:400;font-size:1.1rem;flex:1;}
+  .t-arrow{opacity:0;transform:translateX(-6px);transition:opacity .3s ease, transform .3s ease;color:var(--wine);}
+  .t-row:hover .t-arrow{opacity:1;transform:translateX(0);}
+
+  /* ---------- FEATURED ---------- */
+  .featured{padding:120px 0;}
+  .f-head{max-width:640px;margin-bottom:52px;}
+  .f-head h2{font-size:clamp(2rem,3.6vw,3.1rem);margin-top:20px;}
+  .f-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;perspective:1200px;}
+  .f-card{
+    background:var(--card-bg);border:1px solid var(--line);border-radius:20px;
+    padding:34px 26px;display:flex;flex-direction:column;gap:16px;min-height:260px;
+    transition:transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s ease, opacity .4s ease;
+    transform-style:preserve-3d;will-change:transform;
+  }
+  .f-card:hover{box-shadow:0 24px 50px -28px rgba(34,20,16,.35);}
+  .f-grid:hover .f-card{opacity:.6;}
+  .f-grid:hover .f-card:hover{opacity:1;}
+  .f-num{font-family:'Baskervville',serif;font-style:italic;font-size:1.6rem;color:var(--wine-soft);-webkit-text-stroke:1.2px var(--wine);color:transparent;}
+  .f-card h3{font-size:1.25rem;margin-top:auto;}
+  .f-card p{font-size:.9rem;}
+
+  /* ---------- IG STRIP ---------- */
+  .ig-strip{background:var(--ink);color:var(--paper);padding:100px 0;}
+  .ig-inner{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;}
+  .ig-inner h2{color:var(--paper);font-size:clamp(1.9rem,3.4vw,2.7rem);}
+  .ig-inner p{color:color-mix(in srgb, var(--paper) 65%, transparent);margin-top:16px;max-width:420px;}
+  .ig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .ig-tile{
+    aspect-ratio:1;border-radius:12px;overflow:hidden;position:relative;display:block;
+    transition:transform .4s cubic-bezier(.16,1,.3,1), opacity .4s ease, filter .4s ease;
+  }
+  .ig-grid:hover .ig-tile{opacity:.5;filter:saturate(.6);}
+  .ig-grid .ig-tile:hover{opacity:1;filter:none;transform:scale(1.04);}
+  .ig-tile::after{
+    content:"";position:absolute;inset:0;background:rgba(20,14,10,.4);
+    opacity:0;transition:opacity .3s ease;
+  }
+  .ig-tile .ig-mark{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    color:#fff;opacity:0;transition:opacity .3s ease;
+  }
+  .ig-tile:hover::after,.ig-tile:hover .ig-mark{opacity:1;}
+  .ig-strip .btn-solid{background:var(--paper);color:var(--ink);border-color:var(--paper);margin-top:28px;}
+
+  /* ---------- CONTACT ---------- */
+  .contact{padding:130px 0 70px;}
+  .contact-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:60px;}
+  .contact h2{font-size:clamp(2.1rem,4vw,3.4rem);}
+  .contact-actions{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap;}
+  .contact-side{border-left:1px solid var(--line);padding-left:40px;display:flex;flex-direction:column;gap:26px;}
+  .contact-item .eyebrow{margin-bottom:8px;}
+  .contact-item p{color:var(--ink);font-size:.98rem;}
+  .contact-item p a{border-bottom:1px solid var(--line);transition:border-color .25s ease;}
+  .contact-item p a:hover{border-color:var(--ink);}
+  footer{border-top:1px solid var(--line);margin-top:80px;padding:26px 0;}
+  .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  .footer-row p{font-size:.75rem;color:var(--ink-soft);}
+
+  @media (max-width:1024px){
+    .team-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:860px){
+    .hero-grid,.about-grid,.contact-grid{grid-template-columns:1fr;}
+    .hero-visual{order:-1;aspect-ratio:16/10;}
+    .team-grid{grid-template-columns:1fr;max-width:360px;margin-inline:auto;}
+    .f-grid{grid-template-columns:1fr;}
+    .ig-inner{grid-template-columns:1fr;}
+    .navlinks{position:fixed;inset:64px 16px auto 16px;background:var(--paper);border:1px solid var(--line);border-radius:18px;flex-direction:column;align-items:flex-start;padding:22px;gap:18px;box-shadow:0 20px 50px -20px rgba(0,0,0,.25);transform-origin:top right;transform:scale(.96);opacity:0;pointer-events:none;transition:opacity .25s ease, transform .25s ease;}
+    .navlinks.open{opacity:1;pointer-events:auto;transform:scale(1);}
+    .menu-toggle{display:flex;}
+    .navcta .btn-line{display:none;}
+    .contact-side{border-left:none;padding-left:0;border-top:1px solid var(--line);padding-top:26px;}
+  }
+  @media (max-width:480px){
+    .wrap{padding-inline:18px;}
+    .hero{padding-top:196px;}
+    .f-card{min-height:auto;}
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="follow-chip" id="followChip">Ver detalle</div>
+
+<div class="floating-actions">
+  <a class="fab fab-whatsapp" href="https://api.whatsapp.com/send/?phone=3815723334&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" rel="noopener" aria-label="Reservar por WhatsApp">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.32 5L2 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm0 1.67c2.2 0 4.26.86 5.82 2.42a8.22 8.22 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.19 8.19 0 01-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24zM7.52 7.87c-.15 0-.4.06-.61.29-.21.23-.8.78-.8 1.9s.82 2.2.93 2.35c.11.15 1.6 2.53 3.95 3.44 1.95.75 2.35.6 2.77.56.42-.04 1.37-.56 1.56-1.1.19-.54.19-1 .13-1.1-.06-.1-.21-.16-.44-.28-.23-.11-1.37-.68-1.58-.75-.21-.08-.37-.11-.52.11-.15.23-.6.75-.73.9-.13.15-.27.17-.5.06-.23-.11-.96-.35-1.83-1.13-.68-.6-1.13-1.35-1.27-1.58-.13-.23-.01-.35.1-.47.1-.1.23-.27.34-.4.11-.13.15-.23.23-.38.08-.15.04-.29-.02-.4-.06-.11-.52-1.27-.72-1.73-.19-.46-.38-.39-.52-.4z"/></svg>
+  </a>
+  <a class="fab fab-instagram" href="https://www.instagram.com/centromedicovs/" target="_blank" rel="noopener" aria-label="Instagram">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+  </a>
+</div>
+
+<header id="siteHeader">
+  <nav class="wrap">
+    <a href="#top" class="logo">
+      <img class="logo-mark-img" src="assets/logo.png" alt="Centro Médico VS">
+    </a>
+    <div class="navlinks" id="navLinks">
+      <a href="#tratamientos">Tratamientos</a>
+      <a href="#sobre-mi">Sobre la Dra.</a>
+      <a href="#equipo">Equipo</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <div class="navcta">
+      <a class="icon-btn" href="https://www.instagram.com/centromedicovs/" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a class="btn btn-line" href="https://api.whatsapp.com/send/?phone=3815723334&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" rel="noopener">Reservar consulta</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow reveal">Dermatología · Estética · Longevidad</p>
+        <h1 id="heroTitle"><span class="mask" style="transition-delay:0s"><span class="word">Un</span></span> <span class="mask" style="transition-delay:.03s"><span class="word">centro</span></span> <span class="mask" style="transition-delay:.06s"><span class="word">médico</span></span> <span class="mask" style="transition-delay:.09s"><span class="word">para</span></span> <span class="mask" style="transition-delay:.12s"><span class="word">escuchar</span></span> <span class="mask" style="transition-delay:.15s"><span class="word">tu</span></span> <span class="mask" style="transition-delay:.18s"><span class="word">piel</span></span> <span class="mask" style="transition-delay:.21s"><span class="word"><em>y&nbsp;tu&nbsp;bienestar</em></span></span><span class="mask" style="transition-delay:.24s"><span class="word">.</span></span></h1>
+        <div class="hero-copy reveal" style="transition-delay:.35s">
+          <p>Centro Médico VS reúne dermatología clínica, medicina estética y medicina regenerativa en un mismo espacio, con un enfoque integral: cada tratamiento parte de un diagnóstico real, no de una tendencia.</p>
+        </div>
+        <div class="hero-actions reveal" style="transition-delay:.4s">
+          <a href="#tratamientos" class="btn btn-solid">Ver tratamientos</a>
+          <a href="https://www.instagram.com/centromedicovs/" target="_blank" rel="noopener" class="btn btn-line">Seguir en Instagram</a>
+        </div>
+      </div>
+      <div class="hero-visual reveal" style="transition-delay:.1s">
+        <img class="photo-cover" src="assets/hero.png" alt="Recepción de Centro Médico VS">
+        <div class="hero-chip">
+          <span class="name">Centro Médico VS</span>
+          <span class="role">Marcos Paz 583, SMT</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="marquee-band">
+      <div class="marquee-track">
+        <span>Dermatología clínica</span><span>Medicina estética</span><span>Longevidad</span><span>Flebología</span><span>Medicina ortomolecular</span><span>Masajes & bienestar</span><span>Medicina regenerativa</span>
+        <span>Dermatología clínica</span><span>Medicina estética</span><span>Longevidad</span><span>Flebología</span><span>Medicina ortomolecular</span><span>Masajes & bienestar</span><span>Medicina regenerativa</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="wrap">
+      <div class="stat reveal">
+        <div class="stat-num" data-count="15">0</div>
+        <p class="stat-label">Tratamientos disponibles, entre consultas médicas, estética y bienestar.</p>
+      </div>
+      <div class="stat reveal" style="transition-delay:.08s">
+        <div class="stat-num" data-count="4">0</div>
+        <p class="stat-label">Áreas de trabajo: dermatología, estética, longevidad y medicina regenerativa.</p>
+      </div>
+      <div class="stat reveal" style="transition-delay:.16s">
+        <div class="stat-num" data-count="1">0</div>
+        <p class="stat-label">Diagnóstico integral por consulta, como punto de partida de cada tratamiento.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="about" id="sobre-mi">
+    <div class="wrap about-grid">
+      <div class="about-visual reveal">
+        <img class="photo-cover" src="assets/dra-sturgeon.png" alt="Dra. Valeria Sturgeon, médica dermatóloga">
+      </div>
+      <div>
+        <p class="eyebrow reveal">Sobre la Dra. Valeria Sturgeon</p>
+        <h2 class="about-quote reveal" style="transition-delay:.05s">“Trabajo la piel como lo que es: <em>un órgano</em>, no una superficie a corregir.”</h2>
+        <p class="reveal" style="margin-top:22px;max-width:520px;transition-delay:.1s">Cada consulta combina criterio clínico y una mirada estética honesta, para que el tratamiento se ajuste a tu piel y tu momento de vida — desde el control de lunares hasta la medicina regenerativa.</p>
+        <div class="credentials reveal" style="transition-delay:.15s">
+          <span>Dermatología clínica</span>
+          <span>Dermatología oncológica</span>
+          <span>Medicina estética</span>
+          <span>Longevidad</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="treatments" id="tratamientos">
+    <div class="wrap">
+      <div class="t-head reveal">
+        <div>
+          <p class="eyebrow">Tratamientos</p>
+          <h2>Un enfoque integral para tu piel, tu cuerpo y tu bienestar.</h2>
+        </div>
+        <button class="t-toggle-all" id="toggleAllTreatments" type="button" aria-expanded="false">Ver todos</button>
+      </div>
+
+      <div class="t-accordion reveal" id="tAccordion">
+        <details class="t-group">
+          <summary>
+            <span class="t-group-label"><span class="idx">01</span>Consultas médicas</span>
+            <span class="t-group-count">5</span>
+            <span class="t-chevron">+</span>
+          </summary>
+          <div class="t-group-body">
+            <div class="t-row"><span class="t-num">01</span><span class="t-name">Consulta dermatológica</span><span class="t-arrow">→</span></div>
+            <div class="t-row"><span class="t-num">02</span><span class="t-name">Consulta de Medicina Estética</span><span class="t-arrow">→</span></div>
+            <div class="t-row"><span class="t-num">03</span><span class="t-name">Consulta de Longevidad</span><span class="t-arrow">→</span></div>
+            <div class="t-row"><span class="t-num">04</span><span class="t-name">Medicina Ortomolecular (Sueroterapia)</span><span class="t-arrow">→</span></div>
+            <div class="t-row"><span class="t-num">05</span><span class="t-name">Consulta de Flebología</span><span class="t-arrow">→</span></div>
+          </div>
+        </details>
+        <details class="t-group">
+          <summary>
+            <span class="t-group-label"><span class="idx">02</span>Piel & cuerpo</span>
+            <span class="t-group-count">4</span>
+            <span class="t-chevron">+</span>
+          </summary>
+          <div class="t-group-body">
+            <div class="t-row"><span class="t-num">06</span><span class="t-name">Limpieza facial</span><span class="t-arrow">→</span></div>
+            <div class="t-row"><span class="t-num">07</span><span class="t-name">Aparatología corporal y facial</span><span class="t-arrow">→</span></div>
+            <div class="t-row"><span class="t-num">08</span><span class="t-name">Depilación definitiva</span><span class="t-arrow">→</span></div>
+            <div class="t-row"><span class="t-num">09</span><span class="t-name">Tratamientos corporales</span><span class="t-arrow">→</span></div>
+          </div>
+        </details>
+        <details class="t-group">
+          <summary>
+            <span class="t-group-label"><span class="idx">03</span>Masajes & bienestar</span>
+            <span class="t-group-count">4</span>
+            <span class="t-chevron">+</span>
+          </summary>
+          <div class="t-group-body">
+            <div class="t-row"><span class="t-num">10</span><span class="t-name">Masaje relajante</span><span class="t-arrow">→</span></div>
+            <div class="t-row"><span class="t-num">11</span><span class="t-name">Masaje reductor</span><span class="t-arrow">→</span></div>
+            <div class="t-row"><span class="t-num">12</span><span class="t-name">Masaje de drenaje linfático</span><span class="t-arrow">→</span></div>
+            <div class="t-row"><span class="t-num">13</span><span class="t-name">Masaje descontracturante</span><span class="t-arrow">→</span></div>
+          </div>
+        </details>
+        <details class="t-group" id="regenerativa">
+          <summary>
+            <span class="t-group-label"><span class="idx">04</span>Medicina regenerativa</span>
+            <span class="t-group-count">2</span>
+            <span class="t-chevron">+</span>
+          </summary>
+          <div class="t-group-body">
+            <div class="t-row"><span class="t-num">14</span><span class="t-name">Sueroterapia</span><span class="t-arrow">→</span></div>
+            <div class="t-row"><span class="t-num">15</span><span class="t-name">Plasma rico en plaquetas (PRP)</span><span class="t-arrow">→</span></div>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="featured">
+    <div class="wrap">
+      <div class="f-head reveal">
+        <p class="eyebrow">Lo más elegido</p>
+        <h2>Protocolos de medicina regenerativa</h2>
+      </div>
+      <div class="f-grid">
+        <div class="f-card reveal">
+          <span class="f-num">01</span>
+          <h3>Plasma rico en plaquetas</h3>
+          <p>Estimula la regeneración natural de la piel utilizando factores de crecimiento propios del paciente.</p>
+        </div>
+        <div class="f-card reveal" style="transition-delay:.06s">
+          <span class="f-num">02</span>
+          <h3>Sueroterapia</h3>
+          <p>Aporte intravenoso de vitaminas y minerales, dentro del enfoque de medicina ortomolecular y longevidad.</p>
+        </div>
+        <div class="f-card reveal" style="transition-delay:.12s">
+          <span class="f-num">03</span>
+          <h3>Aparatología facial y corporal</h3>
+          <p>Tecnología aplicada al cuidado de la piel y el cuerpo, combinada con criterio clínico dermatológico.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ig-strip">
+    <div class="wrap ig-inner">
+      <div class="reveal">
+        <p class="eyebrow" style="color:var(--wine-deep);">@centromedicovs</p>
+        <h2>El día a día del centro, en Instagram.</h2>
+        <p>Novedades, tratamientos y resultados reales — seguí de cerca lo que hacemos.</p>
+        <a href="https://www.instagram.com/centromedicovs/" target="_blank" rel="noopener" class="btn btn-solid">Ver Instagram</a>
+      </div>
+      <div class="ig-grid reveal" style="transition-delay:.1s">
+        <a class="ig-tile" href="https://www.instagram.com/centromedicovs/" target="_blank" rel="noopener" aria-label="Ver en Instagram">
+          <img class="photo-cover" src="assets/feed-1.png" alt="Post de Instagram — Centro Médico VS">
+          <span class="ig-mark"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+        </a>
+        <a class="ig-tile" href="https://www.instagram.com/centromedicovs/" target="_blank" rel="noopener" aria-label="Ver en Instagram">
+          <img class="photo-cover" src="assets/feed-2.png" alt="Post de Instagram — Centro Médico VS">
+          <span class="ig-mark"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+        </a>
+        <a class="ig-tile" href="https://www.instagram.com/centromedicovs/" target="_blank" rel="noopener" aria-label="Ver en Instagram">
+          <img class="photo-cover" src="assets/feed-3.png" alt="Post de Instagram — Centro Médico VS">
+          <span class="ig-mark"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+        </a>
+        <a class="ig-tile" href="https://www.instagram.com/centromedicovs/" target="_blank" rel="noopener" aria-label="Ver en Instagram">
+          <img class="photo-cover" src="assets/feed-4.png" alt="Post de Instagram — Centro Médico VS">
+          <span class="ig-mark"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+        </a>
+        <a class="ig-tile" href="https://www.instagram.com/centromedicovs/" target="_blank" rel="noopener" aria-label="Ver en Instagram">
+          <img class="photo-cover" src="assets/feed-5.png" alt="Post de Instagram — Centro Médico VS">
+          <span class="ig-mark"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+        </a>
+        <a class="ig-tile" href="https://www.instagram.com/centromedicovs/" target="_blank" rel="noopener" aria-label="Ver en Instagram">
+          <img class="photo-cover" src="assets/feed-6.png" alt="Post de Instagram — Centro Médico VS">
+          <span class="ig-mark"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="team" id="equipo">
+    <div class="wrap">
+      <p class="eyebrow reveal">Nuestro equipo</p>
+      <h2 class="reveal" style="margin-top:14px;margin-bottom:44px;font-size:clamp(2rem,3.6vw,3.1rem);max-width:640px;">Personas detrás de cada consulta y cada tratamiento.</h2>
+      <div class="team-grid">
+        <div class="team-card reveal">
+          <div class="team-photo"><img class="photo-cover" src="assets/dra-sturgeon.png" alt="Dra. Valeria Sturgeon"></div>
+          <div>
+            <h3>Médica Dermatóloga</h3>
+            <p class="team-role">Valeria Sturgeon</p>
+          </div>
+        </div>
+        <div class="team-card reveal" style="transition-delay:.06s">
+          <div class="team-photo"><img class="photo-cover" src="assets/dra-zavaleta.jpg" alt="Dra. Laura Zavaleta"></div>
+          <div>
+            <h3>Médica Geriatra</h3>
+            <p class="team-role">Laura Zavaleta</p>
+          </div>
+        </div>
+        <div class="team-card reveal" style="transition-delay:.12s">
+          <div class="team-photo"><img class="photo-cover" src="assets/recepcion.png" alt="Recepción de Centro Médico VS"></div>
+          <div>
+            <h3>Recepción</h3>
+            <p class="team-role pending">Nombre y apellido — a confirmar</p>
+          </div>
+        </div>
+        <div class="team-card reveal" style="transition-delay:.18s">
+          <div class="team-photo"><img class="photo-cover" src="assets/cosmetologa.png" alt="Cosmetóloga de Centro Médico VS"></div>
+          <div>
+            <h3>Cosmetología</h3>
+            <p class="team-role pending">Nombre y apellido — a confirmar</p>
+          </div>
+        </div>
+      </div>
+      <div class="team-banner reveal" style="margin-top:26px;margin-bottom:0;">
+        <img class="photo-cover" src="assets/equipo.png" alt="Equipo de Centro Médico VS">
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contacto">
+    <div class="wrap contact-grid">
+      <div class="reveal">
+        <p class="eyebrow">Contacto</p>
+        <h2>Reservemos tu consulta.</h2>
+        <p style="margin-top:20px;max-width:440px;">Escribinos por WhatsApp contándonos qué necesitás — dermatología, estética, longevidad o bienestar — y te ayudamos a elegir el turno adecuado.</p>
+        <div class="contact-actions">
+          <a href="https://api.whatsapp.com/send/?phone=3815723334&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" rel="noopener" class="btn btn-solid">Reservar por WhatsApp</a>
+          <a href="#tratamientos" class="btn btn-line">Ver tratamientos</a>
+        </div>
+      </div>
+      <div class="contact-side reveal" style="transition-delay:.1s">
+        <div class="contact-item">
+          <p class="eyebrow">Dirección</p>
+          <p>Marcos Paz 583, SMT</p>
+        </div>
+        <div class="contact-item">
+          <p class="eyebrow">WhatsApp</p>
+          <p>3815723334</p>
+        </div>
+        <div class="contact-item">
+          <p class="eyebrow">Instagram — Centro</p>
+          <p><a href="https://www.instagram.com/centromedicovs/" target="_blank" rel="noopener">@centromedicovs</a></p>
+        </div>
+        <div class="contact-item">
+          <p class="eyebrow">Instagram — Dra. Sturgeon</p>
+          <p><a href="https://www.instagram.com/dra.valeriasturgeon/" target="_blank" rel="noopener">@dra.valeriasturgeon</a></p>
+        </div>
+        <div class="contact-item">
+          <p class="eyebrow">Profesional</p>
+          <p>Dra. Valeria Sturgeon — Médica Dermatóloga</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap footer-row">
+      <p>© <span id="year"></span> Centro Médico VS — Dra. Valeria Sturgeon</p>
+      <p>Dermatología · Medicina estética · Longevidad · Bienestar</p>
+    </div>
+  </footer>
+</main>
+
+<script>
+  try{
+    const header = document.getElementById('siteHeader');
+    const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 20);
+    onScroll();
+    window.addEventListener('scroll', onScroll, {passive:true});
+
+    const toggle = document.getElementById('menuToggle');
+    const links = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => links.classList.toggle('open'));
+    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+    }, {threshold:.15});
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Hero headline mask reveal — runs regardless of pointer type
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        const t = document.getElementById('heroTitle');
+        if(t) t.classList.add('ready');
+      }, 150);
+    });
+
+    // Stat count-up
+    const animateCount = (el) => {
+      const target = parseInt(el.dataset.count, 10) || 0;
+      const duration = 1100;
+      let start = null;
+      const step = (ts) => {
+        if(!start) start = ts;
+        const progress = Math.min((ts - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(eased * target);
+        if(progress < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+    const statIO = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting){ animateCount(e.target); statIO.unobserve(e.target); } });
+    }, {threshold:.6});
+    document.querySelectorAll('.stat-num').forEach(el => statIO.observe(el));
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // "Ver todos" expands or collapses every treatment group at once
+    const toggleAllBtn = document.getElementById('toggleAllTreatments');
+    const accordion = document.getElementById('tAccordion');
+    if(toggleAllBtn && accordion){
+      toggleAllBtn.addEventListener('click', () => {
+        const groups = accordion.querySelectorAll('.t-group');
+        const shouldOpen = toggleAllBtn.getAttribute('aria-expanded') !== 'true';
+        groups.forEach(g => { g.open = shouldOpen; });
+        toggleAllBtn.textContent = shouldOpen ? 'Ocultar todos' : 'Ver todos';
+        toggleAllBtn.setAttribute('aria-expanded', String(shouldOpen));
+      });
+    }
+
+    // Pointer-driven effects (cursor, magnetism, tilt) — desktop only, respects reduced motion
+    const pointerFine = window.matchMedia('(pointer: fine)').matches;
+    if(pointerFine && !reducedMotion){
+      document.body.classList.add('has-cursor');
+
+      const dot = document.getElementById('cursorDot');
+      const ring = document.getElementById('cursorRing');
+      let mx = innerWidth/2, my = innerHeight/2, rx = mx, ry = my;
+      window.addEventListener('mousemove', (e) => {
+        mx = e.clientX; my = e.clientY;
+        dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%)`;
+      });
+      (function ringLoop(){
+        rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
+        ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
+        requestAnimationFrame(ringLoop);
+      })();
+      document.querySelectorAll('a, button, .t-row, .f-card, .ig-tile').forEach(el => {
+        el.addEventListener('mouseenter', () => ring.classList.add('hovering'));
+        el.addEventListener('mouseleave', () => ring.classList.remove('hovering'));
+      });
+
+      // Magnetic buttons
+      document.querySelectorAll('.btn, .icon-btn').forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+          const r = btn.getBoundingClientRect();
+          const relX = e.clientX - r.left - r.width/2;
+          const relY = e.clientY - r.top - r.height/2;
+          btn.style.transition = 'transform .12s ease';
+          btn.style.transform = `translate(${relX*0.25}px, ${relY*0.35}px)`;
+        });
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transition = 'transform .5s cubic-bezier(.16,1,.3,1)';
+          btn.style.transform = 'translate(0,0)';
+        });
+      });
+
+      // Hero visual + featured cards: 3D tilt toward cursor
+      const tiltEls = [document.querySelector('.hero-visual'), ...document.querySelectorAll('.f-card')];
+      tiltEls.forEach(el => {
+        if(!el) return;
+        const magnitude = el.classList.contains('f-card') ? 6 : 10;
+        el.addEventListener('mousemove', (e) => {
+          const r = el.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          el.style.transform = `rotateY(${px*magnitude}deg) rotateX(${-py*magnitude}deg)`;
+        });
+        el.addEventListener('mouseleave', () => { el.style.transform = 'rotateY(0deg) rotateX(0deg)'; });
+      });
+
+      // Floating "Ver detalle" chip trailing the cursor over treatment rows & feature cards
+      const chip = document.getElementById('followChip');
+      let cmx = mx, cmy = my, crx = mx, cry = my, chipOn = false;
+      window.addEventListener('mousemove', (e) => { cmx = e.clientX; cmy = e.clientY; });
+      (function chipLoop(){
+        crx += (cmx - crx) * 0.25; cry += (cmy - cry) * 0.25;
+        const scale = chipOn ? 1 : 0.6;
+        chip.style.transform = `translate(${crx}px, ${cry}px) translate(-50%,-50%) scale(${scale})`;
+        requestAnimationFrame(chipLoop);
+      })();
+      document.querySelectorAll('.t-row, .f-card').forEach(el => {
+        el.addEventListener('mouseenter', () => { chipOn = true; chip.classList.add('show'); });
+        el.addEventListener('mouseleave', () => { chipOn = false; chip.classList.remove('show'); });
+      });
+    }
+  }catch(e){}
+</script>
+</body>
+</html>
