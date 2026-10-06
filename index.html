@@ -10,36 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&family=Beau+Rivage&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#FEFEFE;
-    --paper-deep:#F2E9DE;
-    --ink:#634A35;
-    --ink-soft:#93826E;
-    --wine:#634A35;
-    --wine-deep:#4A3626;
-    --wine-soft:#E8DBCB;
-    --sage:#93826E;
-    --sand:#B8A99A;
-    --line: rgba(99,74,53,.18);
-    --card-bg: #FFFFFF;
-    color-scheme: light;
-  }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --paper:#1B140F;
-      --paper-deep:#261C15;
-      --ink:#F2E6D8;
-      --ink-soft:#C9B7A5;
-      --wine:#D9BE9E;
-      --wine-deep:#E9D3B4;
-      --wine-soft:#3A2C21;
-      --sage:#B8A99A;
-      --sand:#93826E;
-      --line: rgba(242,230,216,.18);
-      --card-bg: #241A13;
-      color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"]{
     --paper:#1B140F;
     --paper-deep:#261C15;
     --ink:#F2E6D8;
@@ -265,17 +235,29 @@
   }
 
   /* ---------- TEAM ---------- */
-  .team{padding:120px 0;background:var(--paper-deep);}
-  .team-banner{position:relative;border-radius:24px;overflow:hidden;aspect-ratio:16/10;margin-bottom:60px;box-shadow:0 30px 70px -35px rgba(34,20,16,.3);}
-  .team-banner img{object-position:center 12%;}
-  .team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;perspective:1200px;}
-  .team-card{display:flex;flex-direction:column;gap:16px;transition:opacity .4s ease;}
-  .team-grid:hover .team-card{opacity:.55;}
-  .team-grid .team-card:hover{opacity:1;}
-  .team-photo{aspect-ratio:4/5;border-radius:18px;overflow:hidden;}
+  .team{padding:120px 0 130px;background:var(--paper-deep);overflow:hidden;}
+  .team-carousel{
+    overflow:hidden;margin-inline:-24px;padding-inline:24px;
+    -webkit-mask-image:linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image:linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+  .team-track{display:flex;gap:26px;width:max-content;animation:teamScroll 30s linear infinite;}
+  .team-track:hover{animation-play-state:paused;}
+  @media (prefers-reduced-motion: reduce){
+    .team-track{animation:none;}
+    .team-carousel{overflow-x:auto;}
+  }
+  @keyframes teamScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  .team-card{flex:0 0 240px;display:flex;flex-direction:column;gap:16px;transition:opacity .4s ease;}
+  .team-track:hover .team-card{opacity:.55;}
+  .team-track .team-card:hover{opacity:1;}
+  .team-photo{aspect-ratio:4/5;border-radius:18px;overflow:hidden;width:240px;}
   .team-card h3{font-size:1.2rem;}
   .team-role{font-size:.8rem;color:var(--ink-soft);margin-top:3px;letter-spacing:.02em;}
   .team-role.pending{font-style:italic;opacity:.75;}
+  @media (max-width:640px){
+    .team-card,.team-photo{flex-basis:190px;width:190px;}
+  }
 
   /* ---------- TREATMENTS (accordion) ---------- */
   .treatments{padding:120px 0;background:var(--paper-deep);}
@@ -326,7 +308,7 @@
   .featured{padding:120px 0;}
   .f-head{max-width:640px;margin-bottom:52px;}
   .f-head h2{font-size:clamp(2rem,3.6vw,3.1rem);margin-top:20px;}
-  .f-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;perspective:1200px;}
+  .f-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;perspective:1200px;}
   .f-card{
     background:var(--card-bg);border:1px solid var(--line);border-radius:20px;
     padding:34px 26px;display:flex;flex-direction:column;gap:16px;min-height:260px;
@@ -378,12 +360,11 @@
   .footer-row p{font-size:.75rem;color:var(--ink-soft);}
 
   @media (max-width:1024px){
-    .team-grid{grid-template-columns:repeat(2,1fr);}
+    .f-grid{grid-template-columns:repeat(2,1fr);}
   }
   @media (max-width:860px){
     .hero-grid,.about-grid,.contact-grid{grid-template-columns:1fr;}
     .hero-visual{order:-1;aspect-ratio:16/10;}
-    .team-grid{grid-template-columns:1fr;max-width:360px;margin-inline:auto;}
     .f-grid{grid-template-columns:1fr;}
     .ig-inner{grid-template-columns:1fr;}
     .navlinks{position:fixed;inset:64px 16px auto 16px;background:var(--paper);border:1px solid var(--line);border-radius:18px;flex-direction:column;align-items:flex-start;padding:22px;gap:18px;box-shadow:0 20px 50px -20px rgba(0,0,0,.25);transform-origin:top right;transform:scale(.96);opacity:0;pointer-events:none;transition:opacity .25s ease, transform .25s ease;}
@@ -442,8 +423,8 @@
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <p class="eyebrow reveal">Dermatología · Estética · Longevidad</p>
-        <h1 id="heroTitle"><span class="mask" style="transition-delay:0s"><span class="word">Un</span></span> <span class="mask" style="transition-delay:.03s"><span class="word">centro</span></span> <span class="mask" style="transition-delay:.06s"><span class="word">médico</span></span> <span class="mask" style="transition-delay:.09s"><span class="word">para</span></span> <span class="mask" style="transition-delay:.12s"><span class="word">escuchar</span></span> <span class="mask" style="transition-delay:.15s"><span class="word">tu</span></span> <span class="mask" style="transition-delay:.18s"><span class="word">piel</span></span> <span class="mask" style="transition-delay:.21s"><span class="word"><em>y&nbsp;tu&nbsp;bienestar</em></span></span><span class="mask" style="transition-delay:.24s"><span class="word">.</span></span></h1>
+        <p class="eyebrow reveal">Dermatología · Estética · Longevidad · Flebología · Nutrición</p>
+        <h1 id="heroTitle"><span class="mask" style="transition-delay:0s"><span class="word">Medicina</span></span> <span class="mask" style="transition-delay:.03s"><span class="word">integral.</span></span> <span class="mask" style="transition-delay:.06s"><span class="word">Profesionales</span></span> <span class="mask" style="transition-delay:.09s"><span class="word">especializados.</span></span> <span class="mask" style="transition-delay:.12s"><span class="word">Un</span></span> <span class="mask" style="transition-delay:.15s"><span class="word">mismo</span></span> <span class="mask" style="transition-delay:.18s"><span class="word">compromiso:</span></span> <span class="mask" style="transition-delay:.21s"><span class="word"><em>tu&nbsp;salud</em></span></span><span class="mask" style="transition-delay:.24s"><span class="word">.</span></span></h1>
         <div class="hero-copy reveal" style="transition-delay:.35s">
           <p>Centro Médico VS reúne dermatología clínica, medicina estética y medicina regenerativa en un mismo espacio, con un enfoque integral: cada tratamiento parte de un diagnóstico real, no de una tendencia.</p>
         </div>
@@ -574,24 +555,29 @@
   <section class="featured">
     <div class="wrap">
       <div class="f-head reveal">
-        <p class="eyebrow">Lo más elegido</p>
-        <h2>Protocolos de medicina regenerativa</h2>
+        <p class="eyebrow">Nuestro proceso</p>
+        <h2>Así te acompañamos, paso a paso.</h2>
       </div>
       <div class="f-grid">
         <div class="f-card reveal">
           <span class="f-num">01</span>
-          <h3>Plasma rico en plaquetas</h3>
-          <p>Estimula la regeneración natural de la piel utilizando factores de crecimiento propios del paciente.</p>
+          <h3>Nos escribís</h3>
+          <p>Por WhatsApp, contándonos qué necesitás, qué te preocupa o qué servicio estás buscando. Te ayudamos a encontrar la atención adecuada.</p>
         </div>
         <div class="f-card reveal" style="transition-delay:.06s">
           <span class="f-num">02</span>
-          <h3>Sueroterapia</h3>
-          <p>Aporte intravenoso de vitaminas y minerales, dentro del enfoque de medicina ortomolecular y longevidad.</p>
+          <h3>Evaluación profesional</h3>
+          <p>Conocemos tu situación, tus antecedentes y tus necesidades para brindarte una mirada integral y definir el abordaje más adecuado.</p>
         </div>
         <div class="f-card reveal" style="transition-delay:.12s">
           <span class="f-num">03</span>
-          <h3>Aparatología facial y corporal</h3>
-          <p>Tecnología aplicada al cuidado de la piel y el cuerpo, combinada con criterio clínico dermatológico.</p>
+          <h3>Plan personalizado</h3>
+          <p>A partir de la evaluación, te orientamos con un plan pensado para vos, con indicaciones, tiempos y objetivos claros.</p>
+        </div>
+        <div class="f-card reveal" style="transition-delay:.18s">
+          <span class="f-num">04</span>
+          <h3>Seguimiento</h3>
+          <p>Acompañamos tu evolución y ajustamos el abordaje cuando sea necesario, para que cada etapa de tu atención tenga continuidad.</p>
         </div>
       </div>
     </div>
@@ -638,38 +624,51 @@
     <div class="wrap">
       <p class="eyebrow reveal">Nuestro equipo</p>
       <h2 class="reveal" style="margin-top:14px;margin-bottom:44px;font-size:clamp(2rem,3.6vw,3.1rem);max-width:640px;">Personas detrás de cada consulta y cada tratamiento.</h2>
-      <div class="team-grid">
-        <div class="team-card reveal">
-          <div class="team-photo"><img class="photo-cover" src="assets/dra-sturgeon.png" alt="Dra. Valeria Sturgeon"></div>
-          <div>
-            <h3>Médica Dermatóloga</h3>
-            <p class="team-role">Valeria Sturgeon</p>
+      <div class="team-carousel reveal">
+        <div class="team-track">
+          <div class="team-card">
+            <div class="team-photo"><img class="photo-cover" src="assets/dra-zavaleta.jpg" alt="Dra. Laura Zavaleta"></div>
+            <div>
+              <h3>Médica Geriatra</h3>
+              <p class="team-role">Laura Zavaleta</p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-photo"><img class="photo-cover" src="assets/recepcion.png" alt="Recepción de Centro Médico VS"></div>
+            <div>
+              <h3>Recepción</h3>
+              <p class="team-role pending">Nombre y apellido — a confirmar</p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-photo"><img class="photo-cover" src="assets/cosmetologa.png" alt="Cosmetóloga de Centro Médico VS"></div>
+            <div>
+              <h3>Cosmetología</h3>
+              <p class="team-role pending">Nombre y apellido — a confirmar</p>
+            </div>
+          </div>
+          <div class="team-card" aria-hidden="true">
+            <div class="team-photo"><img class="photo-cover" src="assets/dra-zavaleta.jpg" alt=""></div>
+            <div>
+              <h3>Médica Geriatra</h3>
+              <p class="team-role">Laura Zavaleta</p>
+            </div>
+          </div>
+          <div class="team-card" aria-hidden="true">
+            <div class="team-photo"><img class="photo-cover" src="assets/recepcion.png" alt=""></div>
+            <div>
+              <h3>Recepción</h3>
+              <p class="team-role pending">Nombre y apellido — a confirmar</p>
+            </div>
+          </div>
+          <div class="team-card" aria-hidden="true">
+            <div class="team-photo"><img class="photo-cover" src="assets/cosmetologa.png" alt=""></div>
+            <div>
+              <h3>Cosmetología</h3>
+              <p class="team-role pending">Nombre y apellido — a confirmar</p>
+            </div>
           </div>
         </div>
-        <div class="team-card reveal" style="transition-delay:.06s">
-          <div class="team-photo"><img class="photo-cover" src="assets/dra-zavaleta.jpg" alt="Dra. Laura Zavaleta"></div>
-          <div>
-            <h3>Médica Geriatra</h3>
-            <p class="team-role">Laura Zavaleta</p>
-          </div>
-        </div>
-        <div class="team-card reveal" style="transition-delay:.12s">
-          <div class="team-photo"><img class="photo-cover" src="assets/recepcion.png" alt="Recepción de Centro Médico VS"></div>
-          <div>
-            <h3>Recepción</h3>
-            <p class="team-role pending">Nombre y apellido — a confirmar</p>
-          </div>
-        </div>
-        <div class="team-card reveal" style="transition-delay:.18s">
-          <div class="team-photo"><img class="photo-cover" src="assets/cosmetologa.png" alt="Cosmetóloga de Centro Médico VS"></div>
-          <div>
-            <h3>Cosmetología</h3>
-            <p class="team-role pending">Nombre y apellido — a confirmar</p>
-          </div>
-        </div>
-      </div>
-      <div class="team-banner reveal" style="margin-top:26px;margin-bottom:0;">
-        <img class="photo-cover" src="assets/equipo.png" alt="Equipo de Centro Médico VS">
       </div>
     </div>
   </section>
